@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Compatible Are We?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+      background-color: #ffe6f2;
+      color: #333;
+    }
+    h1 {
+      color: #ff69b4;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .answers button {
+      background-color: #ffb6c1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .answers button:hover {
+      background-color: #ff69b4;
+    }
+    .results {
+      font-weight: bold;
+      color: #ff1493;
+    }
+    #next-btn {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #next-btn:hover {
+      background-color: #ff1493;
+    }
+  </style>
+</head>
+<body>
+  <h1>💕 How Compatible Are We? 💕</h1>
+  <p>Take this quiz to see if you're boyfriend material for me! 🥰</p>
+
+  <div id="quiz">
+    <div id="question-container" class="question"></div>
+    <div id="answers-container" class="answers"></div>
+    <button id="next-btn" class="hidden">Next ➡️</button>
+  </div>
+
+  <div id="results" class="hidden">
+    <p class="results"></p>
+    <button onclick="restartQuiz()">Try Again 🔄</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "1. How old are you?",
+        answers: [
+          { text: "A) -20", score: 0 },
+          { text: "B) 20-25", score: 10 },
+          { text: "C) 25-30", score: 20 },
+          { text: "D) +30", score: 5 }
+        ]
+      },
+      {
+        question: "2. How tall are you?",
+        answers: [
+          { text: "A) -180", score: 0 },
+          { text: "B) 180-190", score: 5 },
+          { text: "C) 190-200", score: 20 },
+          { text: "D) 200+", score: 10 }
+        ]
+      },
+      {
+        question: "3. What’s your major?",
+        answers: [
+          { text: "A) Engineering", score: 20 },
+          { text: "B) Compsci", score: 10 },
+          { text: "C) Arts", score: 5 },
+          { text: "D) Other", score: 0 }
+        ]
+      },
+      {
+        question: "4. How would you describe your style?",
+        answers: [
+          { text: "A) Academia", score: 20 },
+          { text: "B) Casual", score: 5 },
+          { text: "C) Formal", score: 10 },
+          { text: "D) Other", score: 0 }
+        ]
+      },
+      {
+        question: "5. What kind of art do you do?",
+        answers: [
+          { text: "A) Drawing", score: 20 },
+          { text: "B) Music", score: 10 },
+          { text: "C) Other", score: 5 },
+          { text: "D) No kind 🤨", score: 0 }
+        ]
+      },
+      {
+        question: "6. Choose a video game:",
+        answers: [
+          { text: "A) Life is Strange", score: 10 },
+          { text: "B) Animal Crossing", score: 20 },
+          { text: "C) Call of Duty", score: 5 },
+          { text: "D) I don’t play games / neither", score: 0 }
+        ]
+      },
+      {
+        question: "7. What platform do you spend most of your time on?",
+        answers: [
+          { text: "A) YouTube", score: 10 },
+          { text: "B) Instagram", score: 0 },
+          { text: "C) Telegram", score: 5 },
+          { text: "D) Pinterest", score: 20 }
+        ]
+      },
+      {
+        question: "8. Choose an author:",
+        answers: [
+          { text: "A) L.M. Montgomery", score: 20 },
+          { text: "B) Dostoevsky", score: 5 },
+          { text: "C) Murakami", score: 10 },
+          { text: "D) I don’t read 🤨", score: 0 }
+        ]
+      },
+      {
+        question: "9. Choose an indoor activity:",
+        answers: [
+          { text: "A) Cooking", score: 10 },
+          { text: "B) Browsing", score: 0 },
+          { text: "C) Gaming", score: 5 },
+          { text: "D) Reading", score: 20 }
+        ]
+      },
+      {
+        question: "10. Choose your ideal date:",
+        answers: [ { text: "A) Movies", score: 5 },
+          { text: "B) Dinner date", score: 10 },
+          { text: "C) Shopping", score: 10 },
+          { text: "D) Other", score: 5 }
+        ]
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let totalScore = 0;
+
+    const questionContainer = document.getElementById("question-container");
+    const answersContainer = document.getElementById("answers-container");
+    const nextButton = document.getElementById("next-btn");
+    const resultsContainer = document.getElementById("results");
+
+    function showQuestion() {
+      const question = questions[currentQuestionIndex];
+      questionContainer.textContent = question.question;
+      answersContainer.innerHTML = "";
+
+      question.answers.forEach(answer => {
+        const button = document.createElement("button");
+        button.textContent = answer.text;
+        button.onclick = () => {
+          totalScore += answer.score;
+          nextButton.classList.remove("hidden");
+        };
+        answersContainer.appendChild(button);
+      });
+    }
+
+    nextButton.onclick = () => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion();
+        nextButton.classList.add("hidden");
+      } else {
+        showResults();
+      }
+    };
+
+    function showResults() {
+      document.getElementById("quiz").classList.add("hidden");
+      resultsContainer.classList.remove("hidden");
+      const resultsText = document.querySelector(".results");
+
+      if (totalScore >= 150) {
+        resultsText.textContent = "Perfect Match 💕: You're everything I'm looking for in a boyfriend!";
+      } else if (totalScore >= 100) {
+        resultsText.textContent = "Pretty Good 🌟: We might just make a great pair!";
+      } else if (totalScore >= 50) {
+        resultsText.textContent = "Let’s See 🤔: You’re interesting, but we might need to work on some things.";
+      } else {
+        resultsText.textContent = "Not Quite 😅: Maybe we're better off as friends.";
+      }
+    }
+
+    function restartQuiz() {
+      currentQuestionIndex = 0;
+      totalScore = 0;
+      resultsContainer.classList.add("hidden");
+      document.getElementById("quiz").classList.remove("hidden");
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
